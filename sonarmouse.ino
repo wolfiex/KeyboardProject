@@ -15,6 +15,7 @@ const int mouseButton = 3;    // input pin for the mouse pushButton
 const int xmouse = A2;         // joystick X axis
 const int ymouse = A1; 
 const int yscroll = A3; 
+const int xscroll = A0; 
 
 
 // defines pins numbers
@@ -54,6 +55,7 @@ void loop()
       int yReading = readAxis(ymouse);
       long ysReading = readAxisScroll(yscroll);
 
+      
 
       Mouse.move(- xReading, yReading, 0);
       delay(responseDelay);
@@ -69,13 +71,31 @@ digitalWrite(trigPin, LOW);
       // Calculating the distance
       distance= duration*0.034/2;
       // Prints the distance on the Serial Monitor
-      Serial.print("Distance: ");
-      Serial.println(distance);
       sonar(distance);
 
       
   }
   
+switch (analogRead(xscroll)) {
+    case 0:
+         Keyboard.press(KEY_LEFT_CTRL);
+         Keyboard.press(KEY_RIGHT_ARROW);
+         delay(100);
+          Keyboard.releaseAll();
+          delay(1000);
+      break;
+    case 1023:
+      Keyboard.press(KEY_LEFT_CTRL);
+         Keyboard.press(KEY_LEFT_ARROW);
+         delay(100);
+          Keyboard.releaseAll();
+          delay(1000);
+      break;
+    //default: 
+      // if nothing else matches, do the default
+      // default is optional
+    //break;
+  }
 
 
 }
@@ -119,6 +139,7 @@ Mouse.move(0, 0, -distance);
 if (distance < 0 ){
       delay(20*responseDelay);
 }
+
 }
 
 
@@ -128,13 +149,13 @@ int sonar(int distance) {
 
   if (distance < 40){
 
-    if (distance<10){
-      Mouse.move(0, 0, -4*distance);
+    if (distance<12){
+      Mouse.move(0, 0, 6*(-13+distance));
 
   }
 
   else{
-    Mouse.move(0, 0, distance-10);
+    Mouse.move(0, 0, 1.2*distance-10);
     }
 
       delay(30*responseDelay);
